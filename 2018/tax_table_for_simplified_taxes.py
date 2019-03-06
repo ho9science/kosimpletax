@@ -1,10 +1,44 @@
 MANWON = 10000
-def calc_total_annual_income(income, mothly=None):
-	if mothly:
-		salary = income * 12
+def median_income_section(pay):
+	str_pay = str(pay/1000)
+	if pay < 1060:
+		median = pay
+	elif pay < 1500:		
+		if int(int(str_pay[2:])/5) == 0:
+			median = float(str_pay[0:3]+"2.5")
+		else:
+			median = float(str_pay[0:3]+"7.5")
+	elif pay < 3000:
+		median = float(str_pay[0:3]+"5")
+	elif pay < 10000:
+		point = int(int(str_pay[2:])/20)
+		if point == 0:
+			median = float(str_pay[0:2]+"10")
+		elif point == 1:
+			median = float(str_pay[0:2]+"30")
+		elif point == 2:
+			median = float(str_pay[0:2]+"50")
+		elif point == 3:
+			median = float(str_pay[0:2]+"70")
+		elif point == 4:
+			median = float(str_pay[0:2]+"90")
 	else:
-		salary = income
-	return salary
+		median = pay
+	return median
+#월급여액: 소득구간의 중간값
+def calc_total_monthly_income(income):
+	median = median_income_section(income)
+	return median * 12
+#연간 총 급여액
+def calc_total_annual_income(income):
+	temp = income / 12
+	median = median_income_section(temp)
+	return median * 12
+
+def calc_median_monthly_income(income):
+	temp = income / 12
+	median = median_income_section(temp)
+	return median
 
 #근로소득공제
 def calc_earned_income_deduction(salary):
@@ -31,7 +65,7 @@ def calc_personal_allowance(number_of_people = 1):
 
 #연금보험료공제
 def calc_annuity_insurance_deduction(salary):
-	#월급여액(비과세소득 제외)이 속한 구간의 중간 값(천원미만 절사) 필요
+	#원단위 절사 필요
 	annuity_insurance_amount = salary/12/1000*1000*0.045*12
 	if annuity_insurance_amount < 15.66*MANWON:
 		annuity_insurance_amount = 15.66*MANWON
@@ -126,7 +160,7 @@ def calc_ease_tax_amount(finalized_tax_amount):
 
 number_of_people = 1
 # salary = calc_total_annual_income(2505000, 'monthly')
-salary = calc_total_annual_income(30000000)
+salary = calc_total_annual_income(30060000)
 print("연간 총급여액: {}".format(salary))
 earned_income_deduction = calc_earned_income_deduction(salary)
 print("근로소득공제: {}".format(earned_income_deduction))
