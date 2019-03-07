@@ -35,11 +35,6 @@ def calc_total_annual_income(income):
 	median = median_income_section(temp)
 	return median * 12
 
-def calc_median_monthly_income(income):
-	temp = income / 12
-	median = median_income_section(temp)
-	return median
-
 #근로소득공제
 def calc_earned_income_deduction(salary):
 	if salary <= 500*MANWON:
@@ -66,7 +61,8 @@ def calc_personal_allowance(number_of_people = 1):
 #연금보험료공제
 def calc_annuity_insurance_deduction(salary):
 	#원단위 절사 필요
-	annuity_insurance_amount = salary/12/1000*1000*0.045*12
+	pension_share = salary/12*0.045
+	annuity_insurance_amount = (pension_share - (pension_share % 10))*12
 	if annuity_insurance_amount < 15.66*MANWON:
 		annuity_insurance_amount = 15.66*MANWON
 	elif annuity_insurance_amount > 242.46*MANWON:
@@ -119,20 +115,22 @@ def calc_tax_base(earned_income, personal_allowance, annuity_insurance, special_
 
 #산출세액
 def calc_tax_assessment(tax_base):
+	temp_tax_base = 0
 	if tax_base <= 1200*MANWON:
-		return tax_base*0.06
+		temp_tax_base = tax_base*0.06
 	elif tax_base <= 4600*MANWON:
-		return 72*MANWON + (tax_base - 1200*MANWON)*0.15
+		temp_tax_base = 72*MANWON + (tax_base - 1200*MANWON)*0.15
 	elif tax_base <= 8800*MANWON:
-		return 582*MANWON + (tax_base - 4600*MANWON)*0.24
+		temp_tax_base = 582*MANWON + (tax_base - 4600*MANWON)*0.24
 	elif tax_base <= 15000*MANWON:
-		return 1590*MANWON + (tax_base - 8800*MANWON)*0.35
+		temp_tax_base = 1590*MANWON + (tax_base - 8800*MANWON)*0.35
 	elif tax_base <= 30000*MANWON:
-		return 3760*MANWON + (tax_base - 15000*MANWON)*0.38
+		temp_tax_base = 3760*MANWON + (tax_base - 15000*MANWON)*0.38
 	elif tax_base <= 50000*MANWON:
-		return 9460*MANWON + (tax_base - 30000*MANWON)*0.4
+		temp_tax_base = 9460*MANWON + (tax_base - 30000*MANWON)*0.4
 	elif tax_base > 50000*MANWON:
-		return 17460*MANWON + (tax_base - 50000*MANWON)*0.42
+		temp_tax_base = 17460*MANWON + (tax_base - 50000*MANWON)*0.42
+	return temp_tax_base - temp_tax_base % 10
 
 #근로소득 세액공제
 def calc_earned_income_tax_credit(tax_assessment, salary):
@@ -148,7 +146,7 @@ def calc_earned_income_tax_credit(tax_assessment, salary):
 		tax_credit = 53*MANWON
 	elif salary > 7000*MANWON and tax_credit > 50*MANWON:
 		tax_credit = 50*MANWON
-	return tax_credit
+	return tax_credit - tax_credit % 10
 
 #결정세액
 def calc_finalized_tax_amount(tax_base, tax_credit):
@@ -156,7 +154,8 @@ def calc_finalized_tax_amount(tax_base, tax_credit):
 
 #간이세액
 def calc_ease_tax_amount(finalized_tax_amount):
-	return round(finalized_tax_amount/12, -1)
+	temp_amount = finalized_tax_amount/12
+	return temp_amount - temp_amount % 10
 
 number_of_people = 1
 # salary = calc_total_annual_income(2505000, 'monthly')
