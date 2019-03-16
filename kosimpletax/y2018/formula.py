@@ -1,16 +1,16 @@
 MANWON = 10000
 def median_income_section(pay):
-	str_pay = str(pay/1000)
-	if pay < 1060:
+	str_pay = str(pay/1000*MANWON)
+	if pay < 1060*MANWON:
 		median = pay
-	elif pay < 1500:		
+	elif pay < 1500*MANWON:		
 		if int(int(str_pay[2:])/5) == 0:
 			median = float(str_pay[0:3]+"2.5")
 		else:
 			median = float(str_pay[0:3]+"7.5")
-	elif pay < 3000:
+	elif pay < 3000*MANWON:
 		median = float(str_pay[0:3]+"5")
-	elif pay < 10000:
+	elif pay < 10000*MANWON:
 		point = int(int(str_pay[2:])/20)
 		if point == 0:
 			median = float(str_pay[0:2]+"10")
