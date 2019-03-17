@@ -1,6 +1,6 @@
 from kosimpletax.y2018 import formula
 
-class calculator():
+class Calculator():
 
 	def __init__(self, unit='WON'):
 		self.unit = unit
