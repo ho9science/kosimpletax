@@ -5,10 +5,14 @@ class Calculator():
 	def __init__(self, unit='WON'):
 		self.unit = unit
 
+	def set_unit(unit):
+		self.unit = unit
+
+	def get_total_annual_income(self, income):
+		return formula.calc_total_annual_income(income)
 
 	def get_simple_tax_amount(self, income, number_of_people=1):
-		# salary = calc_total_annual_income(2505000, 'monthly')
-		salary = formula.calc_total_annual_income(income)
+		salary = self.get_total_annual_income(income)
 		earned_income_deduction = formula.calc_earned_income_deduction(salary)
 		earned_income_amount = formula.calc_earned_income_amount(salary, earned_income_deduction)
 		personal_allowance = formula.calc_personal_allowance(number_of_people)
