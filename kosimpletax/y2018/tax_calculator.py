@@ -11,9 +11,17 @@ class Calculator():
 	def get_total_annual_income(self, income):
 		return formula.calc_total_annual_income(income)
 
+	def get_earned_income_deduction(salary):
+		annual_income = self.get_total_annual_income(salary)
+		return formula.calc_earned_income_deduction(annual_income)
+
+	def get_earned_income_amount(salary):
+		earned_income_deduction = self.get_earned_income_deduction(salary)
+		return formula.calc_earned_income_amount(salary, earned_income_deduction)
+		
 	def get_simple_tax_amount(self, income, number_of_people=1):
 		salary = self.get_total_annual_income(income)
-		earned_income_deduction = formula.calc_earned_income_deduction(salary)
+		earned_income_deduction = self.get_earned_income_deduction(salary)
 		earned_income_amount = formula.calc_earned_income_amount(salary, earned_income_deduction)
 		personal_allowance = formula.calc_personal_allowance(number_of_people)
 		annuity_insurance = formula.calc_annuity_insurance_deduction(salary)
