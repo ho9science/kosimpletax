@@ -55,8 +55,8 @@ def calc_earned_income_amount(salary, amount_deducted):
 	return earned_income_amount;
 
 #인적공제
-def calc_personal_allowance(number_of_people = 1):
-	return number_of_people * 150*MANWON
+def calc_personal_allowance(number_of_people=1, number_of_less_than_twenty=0):
+	return (number_of_people+number_of_less_than_twenty) * 150*MANWON
 
 #연금보험료공제
 def calc_annuity_insurance_deduction(salary):
