@@ -25,6 +25,13 @@ class CalculatorTest(unittest.TestCase):
 		result = calc.get_simple_tax_amount(17970000)
 		self.assertEqual(result, 4260.0)
 
+	def test_simple_tax_calculation_example_forth(self):
+		calc = tax_calculator.Calculator()
+		calc.set_number_of_family_dependent(5)
+		calc.set_number_of_less_than_twenty(3)
+		result = calc.get_simple_tax_amount(5010000,'monthly')
+		self.assertEqual(result, 159100.0)
+
 
 if __name__ == '__main__':
 	unittest.main()

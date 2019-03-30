@@ -19,8 +19,10 @@ class Calculator():
 	def get_total_annual_income(self, income):
 		return formula.calc_total_annual_income(income)
 
-	def get_earned_income_deduction(self, salary):
-		annual_income = self.get_total_annual_income(salary)
+	def get_total_monthly_income(self, income):
+		return formula.calc_total_monthly_income(income)
+
+	def get_earned_income_deduction(self, annual_income):
 		return formula.calc_earned_income_deduction(annual_income)
 
 	def get_earned_income_amount(self, salary):
@@ -37,11 +39,10 @@ class Calculator():
 		return formula.calc_special_income_deduction(salary, self.number_of_family_dependent)
 
 	def get_tax_base(self, salary):
-		earned_income_deduction = self.get_earned_income_deduction(salary)
 		earned_income_amount = self.get_earned_income_amount(salary)
 		personal_allowance = self.get_personal_allowance()
 		annuity_insurance = self.get_annuity_insurance_deduction(salary)
-		special_income_deduction = self.get_special_income_deduction(salary)
+		special_income_deduction = self.get_special_income_deduction(salary)		
 		return formula.calc_tax_base(earned_income_amount, personal_allowance, annuity_insurance, special_income_deduction)
 
 	def get_tax_assessment(self, salary):
@@ -56,8 +57,11 @@ class Calculator():
 		tax_credit = self.get_tax_credit(tax_assessment, salary)
 		return formula.calc_finalized_tax_amount(tax_assessment, tax_credit)
 
-	def get_simple_tax_amount(self, income):
-		salary = self.get_total_annual_income(income)
+	def get_simple_tax_amount(self, income, time='year'):
+		if time == 'monthly':
+			salary = self.get_total_monthly_income(income)
+		else:
+			salary = self.get_total_annual_income(income)
 		finalized_tax_amount = self.get_finalized_tax_amount(salary)
 		return formula.calc_ease_tax_amount(finalized_tax_amount)
 		

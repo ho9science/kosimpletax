@@ -1,34 +1,41 @@
 MANWON = 10000
+CHONWON = 1000
 def median_income_section(pay):
-	str_pay = str(pay/1000*MANWON)
-	if pay < 1060*MANWON:
-		median = pay
-	elif pay < 1500*MANWON:		
-		if int(int(str_pay[2:])/5) == 0:
-			median = float(str_pay[0:3]+"2.5")
+	str_pay = str(int(pay/10000))
+	median = 0
+	if pay < 1060*CHONWON:
+		median = 0
+	elif pay < 1500*CHONWON:		
+		if int(int(str_pay)/5) == 0:
+			median = float(str_pay+"25")
 		else:
-			median = float(str_pay[0:3]+"7.5")
-	elif pay < 3000*MANWON:
-		median = float(str_pay[0:3]+"5")
-	elif pay < 10000*MANWON:
-		point = int(int(str_pay[2:])/20)
-		if point == 0:
-			median = float(str_pay[0:2]+"10")
-		elif point == 1:
-			median = float(str_pay[0:2]+"30")
-		elif point == 2:
-			median = float(str_pay[0:2]+"50")
-		elif point == 3:
-			median = float(str_pay[0:2]+"70")
-		elif point == 4:
-			median = float(str_pay[0:2]+"90")
+			median = float(str_pay+"75")
+		median = median * 100
+	elif pay < 3000*CHONWON:
+		median = float(str_pay+"5")
+		median = median * 1000
+	elif pay < 10000*CHONWON:
+		point = int(str_pay)%20
+		if point == 0 or point == 1:
+			median = float(str_pay[0:2]+"1")
+		elif point == 2 or point == 3:
+			median = float(str_pay[0:2]+"3")
+		elif point == 4 or point == 5:
+			median = float(str_pay[0:2]+"5")
+		elif point == 6 or point == 7:
+			median = float(str_pay[0:2]+"7")
+		elif point == 8 or point == 9:
+			median = float(str_pay[0:2]+"9")
+		median = median * 10000
 	else:
 		median = pay
 	return median
+
 #월급여액: 소득구간의 중간값
 def calc_total_monthly_income(income):
 	median = median_income_section(income)
 	return median * 12
+
 #연간 총 급여액
 def calc_total_annual_income(income):
 	temp = income / 12
@@ -61,7 +68,9 @@ def calc_personal_allowance(number_of_people=1, number_of_less_than_twenty=0):
 #연금보험료공제
 def calc_annuity_insurance_deduction(salary):
 	#원단위 절사 필요
-	pension_share = salary/12*0.045
+	monthly_salary = salary/12
+	trimmed_salary = monthly_salary - (monthly_salary % 1000)
+	pension_share = trimmed_salary*0.045
 	annuity_insurance_amount = (pension_share - (pension_share % 10))*12
 	if annuity_insurance_amount < 15.66*MANWON:
 		annuity_insurance_amount = 15.66*MANWON
@@ -140,12 +149,21 @@ def calc_earned_income_tax_credit(tax_assessment, salary):
 	else:
 		tax_credit = 27.5*MANWON+(tax_assessment-50*MANWON)*0.3
 	#간이세액표 상 근로소득공제 한도
-	if salary <= 5500*MANWON and tax_credit >= 66*MANWON:
-		tax_credit = 66*MANWON
-	elif salary <= 7000 and tax_credit >= 63*MANWON:
-		tax_credit = 53*MANWON
-	elif salary > 7000*MANWON and tax_credit > 50*MANWON:
-		tax_credit = 50*MANWON
+	if tax_credit > 66*MANWON:
+		if salary <= 5500*MANWON:
+			tax_credit = 66*MANWON
+		elif salary <= 7000*MANWON:
+			tax_credit = 63*MANWON
+		elif salary > 7000*MANWON:
+			tax_credit = 50*MANWON
+	elif tax_credit > 63*MANWON:
+		if salary <= 7000*MANWON:
+			tax_credit = 63*MANWON
+		elif salary > 7000*MANWON:
+			tax_credit = 50*MANWON
+	elif tax_credit > 50*MANWON:
+		if salary > 7000*MANWON:
+			tax_credit = 50*MANWON
 	return tax_credit - tax_credit % 10
 
 #결정세액
