@@ -72,9 +72,9 @@ def calc_annuity_insurance_deduction(salary):
 	trimmed_salary = monthly_salary - (monthly_salary % 1000)
 	pension_share = trimmed_salary*0.045
 	annuity_insurance_amount = (pension_share - (pension_share % 10))*12
-	if annuity_insurance_amount < 15.66*MANWON:
+	if monthly_salary < 29*MANWON:
 		annuity_insurance_amount = 15.66*MANWON
-	elif annuity_insurance_amount > 242.46*MANWON:
+	elif monthly_salary > 449*MANWON:
 		annuity_insurance_amount = 242.46*MANWON
 	return annuity_insurance_amount
 
