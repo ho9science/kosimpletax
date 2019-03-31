@@ -65,16 +65,19 @@ def calc_earned_income_amount(salary, amount_deducted):
 def calc_personal_allowance(number_of_people=1, number_of_less_than_twenty=0):
 	return (number_of_people+number_of_less_than_twenty) * 150*MANWON
 
-#연금보험료공제
-def calc_annuity_insurance_deduction(salary):
-	#원단위 절사 필요
-	monthly_salary = salary/12
+#국민연금 월 보험료
+def calc_national_pension(monthly_salary):
 	trimmed_salary = monthly_salary - (monthly_salary % 1000)
 	pension_share = trimmed_salary*0.045
-	annuity_insurance_amount = (pension_share - (pension_share % 10))*12
-	if monthly_salary < 29*MANWON:
+	return pension_share - pension_share % 10
+
+#연금보험료공제
+def calc_annuity_insurance_deduction(salary):
+	monthly_salary = salary/12
+	annuity_insurance_amount = calc_national_pension(monthly_salary) * 12
+	if monthly_salary <= 30*MANWON:
 		annuity_insurance_amount = 15.66*MANWON
-	elif monthly_salary > 449*MANWON:
+	elif monthly_salary >= 448*MANWON:
 		annuity_insurance_amount = 242.46*MANWON
 	return annuity_insurance_amount
 
@@ -174,3 +177,19 @@ def calc_finalized_tax_amount(tax_base, tax_credit):
 def calc_ease_tax_amount(finalized_tax_amount):
 	temp_amount = finalized_tax_amount/12
 	return temp_amount - temp_amount % 10
+
+#건강보험 근로자 부담
+def calc_health_insurance(monthly_salary):
+	health_insurance = monthly_salary * 0.0323
+	return health_insurance - health_insurance % 10
+
+#장기요양보험료
+def calc_health_insurance(health_insurance):
+	long_term_insurance = health_insurance * 0.851 * 0.5
+	return long_term_insurance - long_term_insurance % 10
+
+#고용보험
+def calc_employment_insurance(salary):
+	employment_insurance = salary * 0.0065
+	return employment_insurance - employment_insurance % 10
+

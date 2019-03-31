@@ -64,4 +64,8 @@ class Calculator():
 			salary = self.get_total_annual_income(income)
 		finalized_tax_amount = self.get_finalized_tax_amount(salary)
 		return formula.calc_ease_tax_amount(finalized_tax_amount)
+
+	def get_local_income_tax(self, simple_tax):
+		local_income_tax = simple_tax * 0.1
+		return local_income_tax - local_income_tax % 10
 		
