@@ -59,7 +59,7 @@ class Calculator():
 
 	def get_simple_tax_amount(self, income, time='year'):
 		if time == 'monthly':
-			salary = self.get_total_monthly_income(income)
+			salary = self.get_total_monthly_income(income) * 12
 		else:
 			salary = self.get_total_annual_income(income)
 		finalized_tax_amount = self.get_finalized_tax_amount(salary)
@@ -68,4 +68,21 @@ class Calculator():
 	def get_local_income_tax(self, simple_tax):
 		local_income_tax = simple_tax * 0.1
 		return local_income_tax - local_income_tax % 10
+
+	def get_national_pension(self, income, time='year'):
+		if time == 'monthly':
+			salary = self.get_total_monthly_income(income)
+			return formula.calc_national_pension(salary)
+		else:
+			salary = self.get_total_annual_income(income)
+			return formula.calc_national_pension(salary)
+
+	def get_health_insurance(self, monthly_salary):
+		return formula.calc_health_insurance(monthly_salary)
+
+	def get_long_term_insurance(self, health_insurance):
+		return formula.calc_long_term_insurance(health_insurance)
+
+	def get_employment_insurance(self, monthly_salary):
+		return formula.calc_employment_insurance(monthly_salary)
 		

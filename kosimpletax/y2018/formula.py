@@ -34,7 +34,7 @@ def median_income_section(pay):
 #월급여액: 소득구간의 중간값
 def calc_total_monthly_income(income):
 	median = median_income_section(income)
-	return median * 12
+	return median
 
 #연간 총 급여액
 def calc_total_annual_income(income):
@@ -184,12 +184,12 @@ def calc_health_insurance(monthly_salary):
 	return health_insurance - health_insurance % 10
 
 #장기요양보험료
-def calc_health_insurance(health_insurance):
+def calc_long_term_insurance(health_insurance):
 	long_term_insurance = health_insurance * 0.851 * 0.5
 	return long_term_insurance - long_term_insurance % 10
 
 #고용보험
-def calc_employment_insurance(salary):
-	employment_insurance = salary * 0.0065
+def calc_employment_insurance(monthly_salary):
+	employment_insurance = monthly_salary * 0.0065
 	return employment_insurance - employment_insurance % 10
 
