@@ -2,19 +2,20 @@ from kosimpletax.y2018 import formula
 
 class Calculator():
 
-	def __init__(self, unit='WON', number_of_family_dependent=1, number_of_less_than_twenty=0):
+	def __init__(self, unit='WON', number_of_family_dependent=1, number_of_less_than_twenty=0, exemption=100000):
 		self.unit = unit
-		self.number_of_family_dependent = number_of_family_dependent
-		self.number_of_less_than_twenty = number_of_less_than_twenty
+		self.family_dependent = number_of_family_dependent
+		self.less_than_twenty = number_of_less_than_twenty
+		self.exemption = exemption
 
 	def set_unit(self, unit):
 		self.unit = unit
 
-	def set_number_of_family_dependent(self, number_of_family_dependent):
-		self.number_of_family_dependent = number_of_family_dependent
+	def set_family_dependent(self, number_of_family_dependent):
+		self.family_dependent = number_of_family_dependent
 
-	def set_number_of_less_than_twenty(self, number_of_less_than_twenty):
-		self.number_of_less_than_twenty = number_of_less_than_twenty
+	def set_less_than_twenty(self, number_of_less_than_twenty):
+		self.less_than_twenty = number_of_less_than_twenty
 
 	def get_total_annual_income(self, income):
 		return formula.calc_total_annual_income(income)
@@ -30,13 +31,13 @@ class Calculator():
 		return formula.calc_earned_income_amount(salary, earned_income_deduction)
 		
 	def get_personal_allowance(self):
-		return formula.calc_personal_allowance(self.number_of_family_dependent, self.number_of_less_than_twenty)
+		return formula.calc_personal_allowance(self.family_dependent, self.less_than_twenty)
 
 	def get_annuity_insurance_deduction(self, salary):
 		return formula.calc_annuity_insurance_deduction(salary)
 
 	def get_special_income_deduction(self, salary):
-		return formula.calc_special_income_deduction(salary, self.number_of_family_dependent)
+		return formula.calc_special_income_deduction(salary, self.family_dependent)
 
 	def get_tax_base(self, salary):
 		earned_income_amount = self.get_earned_income_amount(salary)
@@ -57,32 +58,43 @@ class Calculator():
 		tax_credit = self.get_tax_credit(tax_assessment, salary)
 		return formula.calc_finalized_tax_amount(tax_assessment, tax_credit)
 
-	def get_simple_tax_amount(self, income, time='year'):
-		if time == 'monthly':
-			salary = self.get_total_monthly_income(income) * 12
-		else:
+	def earned_income_tax(self, income, time='monthly'):
+		if time == 'year':
 			salary = self.get_total_annual_income(income)
+		else:
+			salary = self.get_total_monthly_income(income) * 12
 		finalized_tax_amount = self.get_finalized_tax_amount(salary)
 		return formula.calc_ease_tax_amount(finalized_tax_amount)
 
-	def get_local_income_tax(self, simple_tax):
+	def local_income_tax(self, simple_tax):
 		local_income_tax = simple_tax * 0.1
 		return local_income_tax - local_income_tax % 10
 
-	def get_national_pension(self, income, time='year'):
-		if time == 'monthly':
-			salary = self.get_total_monthly_income(income)
-			return formula.calc_national_pension(salary)
-		else:
+	def national_pension(self, income, time='monthly'):
+		if time == 'year':
 			salary = self.get_total_annual_income(income)
 			return formula.calc_national_pension(salary)
+		else:
+			salary = self.get_total_monthly_income(income)
+			return formula.calc_national_pension(salary)
 
-	def get_health_insurance(self, monthly_salary):
-		return formula.calc_health_insurance(monthly_salary)
+	def health_insurance(self, monthly_salary):
+		return formula.calc_health_insurance(monthly_salary) * 0.5
 
-	def get_long_term_insurance(self, health_insurance):
-		return formula.calc_long_term_insurance(health_insurance)
+	def long_term_insurance(self, monthly_salary):
+		health_insurance = formula.calc_health_insurance(monthly_salary)
+		return formula.calc_long_term_insurance(health_insurance) * 0.5
 
-	def get_employment_insurance(self, monthly_salary):
+	def employment_insurance(self, monthly_salary):
 		return formula.calc_employment_insurance(monthly_salary)
+
+	def tax_exemption(self, salary):
+		if salary > self.exemption:
+			return salary - self.exemption
+		else
+			print('비과세 금액 보다 월급여액이 적습니다.')
+
+	def after_tax_income(self, salary):
+		self.exemption
+		pass
 		

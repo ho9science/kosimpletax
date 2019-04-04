@@ -178,14 +178,14 @@ def calc_ease_tax_amount(finalized_tax_amount):
 	temp_amount = finalized_tax_amount/12
 	return temp_amount - temp_amount % 10
 
-#건강보험 근로자 부담
+#건강보험
 def calc_health_insurance(monthly_salary):
-	health_insurance = monthly_salary * 0.0323
+	health_insurance = monthly_salary * 0.0646
 	return health_insurance - health_insurance % 10
 
 #장기요양보험료
 def calc_long_term_insurance(health_insurance):
-	long_term_insurance = health_insurance * 0.851 * 0.5
+	long_term_insurance = health_insurance * 0.0851
 	return long_term_insurance - long_term_insurance % 10
 
 #고용보험
