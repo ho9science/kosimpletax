@@ -9,27 +9,27 @@ from kosimpletax.y2018 import tax_calculator
 class CalculatorTest(unittest.TestCase):
 	def test_simple_tax_calculation_example_first(self):
 		calc = tax_calculator.Calculator()
-		result = calc.get_simple_tax_amount(30060000)
+		result = calc.earned_income_tax(30060000,'year')
 		self.assertEqual(result, 41630.0)
 
 	def test_simple_tax_calculation_example_second(self):
 		calc = tax_calculator.Calculator()
-		calc.set_number_of_family_dependent(4)
-		calc.set_number_of_less_than_twenty(2)
-		result = calc.get_simple_tax_amount(48120000)
+		calc.set_family_dependent(4)
+		calc.set_less_than_twenty(2)
+		result = calc.earned_income_tax(48120000,'year')
 		self.assertEqual(result, 75920.0)
 
 	def test_simple_tax_calculation_example_third(self):
 		calc = tax_calculator.Calculator()
-		calc.set_number_of_family_dependent(2)
-		result = calc.get_simple_tax_amount(17970000)
+		calc.set_family_dependent(2)
+		result = calc.earned_income_tax(17970000,'year')
 		self.assertEqual(result, 4260.0)
 
 	def test_simple_tax_calculation_example_forth(self):
 		calc = tax_calculator.Calculator()
-		calc.set_number_of_family_dependent(5)
-		calc.set_number_of_less_than_twenty(3)
-		result = calc.get_simple_tax_amount(5010000,'monthly')
+		calc.set_family_dependent(5)
+		calc.set_less_than_twenty(3)
+		result = calc.earned_income_tax(5010000)
 		self.assertEqual(result, 159100.0)
 
 
