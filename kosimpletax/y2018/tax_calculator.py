@@ -95,6 +95,10 @@ class Calculator():
 			print('비과세 금액 보다 월급여액이 적습니다.')
 
 	def after_tax_income(self, salary):
-		self.exemption
-		pass
+		salary = self.tax_exemption(salary)
+		pension_amount = self.national_pension(salary)
+		insure_amount = self.health_insurance(salary)
+		long_term_amount = self.long_term_insurance(salary)
+		employ_amount = self.employment_insurance(salary)
+		return salary - pension_amount - insure_amount - long_term_amount - employ_amount
 		
