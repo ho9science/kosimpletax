@@ -17,6 +17,9 @@ class Calculator():
 	def set_less_than_twenty(self, number_of_less_than_twenty):
 		self.less_than_twenty = number_of_less_than_twenty
 
+	def set_exemption(self, exemption):
+		self.exemption = exemption
+
 	def get_total_annual_income(self, income):
 		return formula.calc_total_annual_income(income)
 
@@ -69,6 +72,11 @@ class Calculator():
 	def local_income_tax(self, simple_tax):
 		local_income_tax = simple_tax * 0.1
 		return local_income_tax - local_income_tax % 10
+	#80% 100% 120%추가
+	def simple_tax(self, salary):
+		tax = self.earned_income_tax(income)
+		local_tax = self.local_income_tax(tax)
+		return tax+local_tax
 
 	def national_pension(self, income, time='monthly'):
 		if time == 'year':
@@ -91,7 +99,7 @@ class Calculator():
 	def tax_exemption(self, salary):
 		if salary > self.exemption:
 			return salary - self.exemption
-		else
+		else:
 			print('비과세 금액 보다 월급여액이 적습니다.')
 
 	def after_tax_income(self, salary):
@@ -100,5 +108,26 @@ class Calculator():
 		insure_amount = self.health_insurance(salary)
 		long_term_amount = self.long_term_insurance(salary)
 		employ_amount = self.employment_insurance(salary)
-		return salary - pension_amount - insure_amount - long_term_amount - employ_amount
-		
+		return salary - pension_amount - insure_amount - long_term_amount - employ_amount + self.exemption
+	
+	def all_tax_income(self, salary):
+		criteria = {}
+		origin_salary = salary
+		salary = self.tax_exemption(salary)
+		pension_amount = self.national_pension(salary)
+		insure_amount = self.health_insurance(salary)
+		long_term_amount = self.long_term_insurance(salary)
+		employment_amount = self.employment_insurance(salary)
+		tax = self.earned_income_tax(salary)
+		local_tax = self.local_income_tax(tax)
+		real_income = salary - pension_amount - insure_amount - long_term_amount - employ_amount - tax - local_tax + self.exemption
+		criteria['exemption'] = self.exemption
+		criteria['origin_salary'] = origin_salary
+		criteria['pension'] = pension_amount
+		criteria['insure'] = insure_amount
+		criteria['long_term'] = long_term_amount
+		criteria['employment'] = employment_amount
+		criteria['tax'] = tax
+		criteria['local_tax'] = local_tax
+		criteria['real_salary'] = real_income
+		return criteria
