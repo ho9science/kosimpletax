@@ -1,2 +1,5 @@
 *.pyc
+build/
+dist/
+kosimpletax.egg-info/
 __pycache__/
